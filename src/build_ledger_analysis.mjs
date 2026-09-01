@@ -10,6 +10,7 @@ const guide = wb.worksheets.add("사용안내");
 const settings = wb.worksheets.add("기준설정");
 const prior = wb.worksheets.add("전기원장");
 const current = wb.worksheets.add("당기원장");
+const helper = wb.worksheets.add("계산도우미");
 const compare = wb.worksheets.add("계정비교");
 const detail = wb.worksheets.add("세부원인분석");
 const checks = wb.worksheets.add("점검");
@@ -63,7 +64,7 @@ guide.getRange("A4:H4").values = [["사용 순서"]];
 guide.getRange("A4:H4").format = { fill: blue, font: { bold: true, color: dark, size: 13 } };
 guide.getRange("A6:B12").values = [
   ["1", "기준설정 시트에서 증감률·증감액 기준을 확인합니다. 기본값은 20%, 100,000,000원입니다."],
-  ["2", "전기원장·당기원장 시트의 예시 행을 지우고 A:G 열에 데이터를 붙여 넣습니다."],
+  ["2", "전기원장·당기원장 시트의 예시값만 A:G 범위에서 지운 뒤 데이터를 붙여 넣습니다. 행 전체나 H:K 계산 수식은 삭제하지 마십시오."],
   ["3", "A 계정코드, B 계정명, C 전표일자, D 결의서번호, E 결의서명, F 차변, G 대변 순서를 유지합니다."],
   ["4", "H:J 열은 계산 열입니다. 1,000건을 초과하면 마지막 행의 수식을 아래로 복사합니다."],
   ["5", "계정비교 시트에서 신규·소멸·금액변동과 원인분석 대상을 확인합니다."],
@@ -169,36 +170,77 @@ function buildLedger(sheet, titleText, sample) {
 buildLedger(prior, "전기 계정원장", priorData);
 buildLedger(current, "당기 계정원장", currentData);
 
+// 계산도우미: 동적 배열 함수 없이 두 원장을 결합하고 고유 계정·분석 대상 거래를 표시
+title(helper, "A1:L1", "계산도우미", "계정비교와 세부원인분석을 위한 호환형 계산 영역입니다. 직접 수정하지 마십시오.");
+helper.getRange("A4:L4").values = [["기간", "계정코드", "계정명", "전표일자", "결의서번호", "결의서명", "순액", "1차 원인분류", "붙임 확인", "검토메모/붙임경로", "고유계정순번", "원인분석순번"]];
+header(helper.getRange("A4:L4"));
+const priorHelperFormulas = [
+  '=IF(\'전기원장\'!A5="","","전기")', '=IF(\'전기원장\'!A5="","",\'전기원장\'!A5)', '=IF(\'전기원장\'!A5="","",\'전기원장\'!B5)',
+  '=IF(\'전기원장\'!A5="","",\'전기원장\'!C5)', '=IF(\'전기원장\'!A5="","",\'전기원장\'!D5)', '=IF(\'전기원장\'!A5="","",\'전기원장\'!E5)',
+  '=IF(\'전기원장\'!A5="","",\'전기원장\'!H5)', '=IF(\'전기원장\'!A5="","",\'전기원장\'!I5)', '=IF(\'전기원장\'!A5="","",\'전기원장\'!J5)',
+  '=IF(\'전기원장\'!A5="","",\'전기원장\'!K5)'
+];
+helper.getRange("A5:J5").formulas = [priorHelperFormulas];
+helper.getRange("A5:J1004").fillDown();
+const currentHelperFormulas = [
+  '=IF(\'당기원장\'!A5="","","당기")', '=IF(\'당기원장\'!A5="","",\'당기원장\'!A5)', '=IF(\'당기원장\'!A5="","",\'당기원장\'!B5)',
+  '=IF(\'당기원장\'!A5="","",\'당기원장\'!C5)', '=IF(\'당기원장\'!A5="","",\'당기원장\'!D5)', '=IF(\'당기원장\'!A5="","",\'당기원장\'!E5)',
+  '=IF(\'당기원장\'!A5="","",\'당기원장\'!H5)', '=IF(\'당기원장\'!A5="","",\'당기원장\'!I5)', '=IF(\'당기원장\'!A5="","",\'당기원장\'!J5)',
+  '=IF(\'당기원장\'!A5="","",\'당기원장\'!K5)'
+];
+helper.getRange("A1005:J1005").formulas = [currentHelperFormulas];
+helper.getRange("A1005:J2004").fillDown();
+helper.getRange("K5").formulas = [['=IF(B5="","",IF(COUNTIF($B$5:B5,B5)=1,COUNT($K$4:K4)+1,""))']];
+helper.getRange("K5:K2004").fillDown();
+helper.getRange("L5").formulas = [['=IF(B5="","",IF(COUNTIFS(\'계정비교\'!$A$5:$A$1004,B5,\'계정비교\'!$H$5:$H$1004,"원인분석 대상")>0,COUNT($L$4:L4)+1,""))']];
+helper.getRange("L5:L2004").fillDown();
+helper.getRange("D5:D2004").format.numberFormat = "yyyy-mm-dd";
+helper.getRange("G5:G2004").format.numberFormat = moneyFmt;
+helper.getRange("A4:L2004").format.borders = { insideHorizontal: { style: "hair", color: "#E7E6E6" } };
+helper.freezePanes.freezeRows(4);
+helper.getRange("A:A").format.columnWidth = 9;
+helper.getRange("B:B").format.columnWidth = 13;
+helper.getRange("C:C").format.columnWidth = 20;
+helper.getRange("D:D").format.columnWidth = 13;
+helper.getRange("E:E").format.columnWidth = 16;
+helper.getRange("F:F").format.columnWidth = 38;
+helper.getRange("G:G").format.columnWidth = 17;
+helper.getRange("H:H").format.columnWidth = 18;
+helper.getRange("I:I").format.columnWidth = 22;
+helper.getRange("J:J").format.columnWidth = 34;
+helper.getRange("K:L").format.columnWidth = 18;
+
 // 계정비교
 title(compare, "A1:K1", "계정별 증감 비교", "전기·당기 계정코드의 합집합을 기준으로 신규·소멸·금액변동을 판정합니다.");
 compare.getRange("A4:K4").values = [["계정코드", "계정명", "전기 순액", "당기 순액", "증감액", "증감률", "변동유형", "판정", "검토 안내", "붙임 확인 필요 건수", "원인분석 메모"]];
 header(compare.getRange("A4:K4"));
-compare.getRange("A5").formulas = [["=SORT(UNIQUE(VSTACK(FILTER('전기원장'!$A$5:$A$1004,'전기원장'!$A$5:$A$1004<>\"\"),FILTER('당기원장'!$A$5:$A$1004,'당기원장'!$A$5:$A$1004<>\"\"))))"]];
-compare.getRange("B5").formulas = [["=IF(A5=\"\",\"\",IFERROR(XLOOKUP(A5,'당기원장'!$A$5:$A$1004,'당기원장'!$B$5:$B$1004),XLOOKUP(A5,'전기원장'!$A$5:$A$1004,'전기원장'!$B$5:$B$1004,\"\")))"]];
-compare.getRange("B5:B204").fillDown();
+compare.getRange("A5").formulas = [["=IFERROR(INDEX('계산도우미'!$B$5:$B$2004,MATCH(ROWS($A$5:A5),'계산도우미'!$K$5:$K$2004,0)),\"\")"]];
+compare.getRange("A5:A1004").fillDown();
+compare.getRange("B5").formulas = [["=IF(A5=\"\",\"\",IFERROR(INDEX('당기원장'!$B$5:$B$1004,MATCH(A5,'당기원장'!$A$5:$A$1004,0)),IFERROR(INDEX('전기원장'!$B$5:$B$1004,MATCH(A5,'전기원장'!$A$5:$A$1004,0)),\"\")))"]];
+compare.getRange("B5:B1004").fillDown();
 compare.getRange("C5").formulas = [["=IF(A5=\"\",\"\",SUMIF('전기원장'!$A$5:$A$1004,A5,'전기원장'!$H$5:$H$1004))"]];
-compare.getRange("C5:C204").fillDown();
+compare.getRange("C5:C1004").fillDown();
 compare.getRange("D5").formulas = [["=IF(A5=\"\",\"\",SUMIF('당기원장'!$A$5:$A$1004,A5,'당기원장'!$H$5:$H$1004))"]];
-compare.getRange("D5:D204").fillDown();
+compare.getRange("D5:D1004").fillDown();
 compare.getRange("E5").formulas = [["=IF(A5=\"\",\"\",D5-C5)"]];
-compare.getRange("E5:E204").fillDown();
+compare.getRange("E5:E1004").fillDown();
 compare.getRange("F5").formulas = [["=IF(A5=\"\",\"\",IF(C5=0,IF(D5=0,0,1),ABS(E5)/ABS(C5)))"]];
-compare.getRange("F5:F204").fillDown();
+compare.getRange("F5:F1004").fillDown();
 compare.getRange("G5").formulas = [["=IF(A5=\"\",\"\",IF(AND(C5=0,D5<>0),\"신규\",IF(AND(C5<>0,D5=0),\"소멸\",IF(E5=0,\"변동없음\",\"금액변동\"))))"]];
-compare.getRange("G5:G204").fillDown();
+compare.getRange("G5:G1004").fillDown();
 compare.getRange("H5").formulas = [["=IF(A5=\"\",\"\",IF(AND(ABS(E5)>='기준설정'!$B$6,OR(G5=\"신규\",G5=\"소멸\",F5>='기준설정'!$B$5)),\"원인분석 대상\",\"일반\"))"]];
-compare.getRange("H5:H204").fillDown();
+compare.getRange("H5:H1004").fillDown();
 compare.getRange("I5").formulas = [["=IF(A5=\"\",\"\",IF(H5=\"원인분석 대상\",\"세부원인분석 시트에서 거래별 원인을 검토\",\"-\"))"]];
-compare.getRange("I5:I204").fillDown();
+compare.getRange("I5:I1004").fillDown();
 compare.getRange("J5").formulas = [["=IF(A5=\"\",\"\",COUNTIFS('전기원장'!$A$5:$A$1004,A5,'전기원장'!$J$5:$J$1004,\"확인 필요\")+COUNTIFS('당기원장'!$A$5:$A$1004,A5,'당기원장'!$J$5:$J$1004,\"확인 필요\"))"]];
-compare.getRange("J5:J204").fillDown();
+compare.getRange("J5:J1004").fillDown();
 compare.getRange("K5").formulas = [["=IF(A5=\"\",\"\",IF(H5<>\"원인분석 대상\",\"\",IF(J5>0,\"붙임 문서 확인 후 원인 확정 필요\",\"결의서명 기반 원인분류 검토\")))"]];
-compare.getRange("K5:K204").fillDown();
-compare.getRange("C5:E204").format.numberFormat = moneyFmt;
-compare.getRange("F5:F204").format.numberFormat = "0.0%";
-compare.getRange("A4:K204").format.borders = { insideHorizontal: { style: "hair", color: "#E7E6E6" } };
-compare.getRange("H5:H204").conditionalFormats.add("containsText", { text: "원인분석 대상", format: { fill: red, font: { bold: true, color: "#9C0006" } } });
-compare.getRange("J5:J204").conditionalFormats.add("cellIs", { operator: "greaterThan", formula: 0, format: { fill: orange, font: { bold: true, color: "#C65911" } } });
+compare.getRange("K5:K1004").fillDown();
+compare.getRange("C5:E1004").format.numberFormat = moneyFmt;
+compare.getRange("F5:F1004").format.numberFormat = "0.0%";
+compare.getRange("A4:K1004").format.borders = { insideHorizontal: { style: "hair", color: "#E7E6E6" } };
+compare.getRange("H5:H1004").conditionalFormats.add("containsText", { text: "원인분석 대상", format: { fill: red, font: { bold: true, color: "#9C0006" } } });
+compare.getRange("J5:J1004").conditionalFormats.add("cellIs", { operator: "greaterThan", formula: 0, format: { fill: orange, font: { bold: true, color: "#C65911" } } });
 compare.freezePanes.freezeRows(4);
 compare.getRange("A:A").format.columnWidth = 13;
 compare.getRange("B:B").format.columnWidth = 20;
@@ -216,14 +258,18 @@ detail.getRange("A3:K3").values = [["※ '확인 필요' 거래는 결의서명�
 detail.getRange("A3:K3").format = { fill: paleOrange, font: { color: "#9C5700", bold: true }, wrapText: true };
 detail.getRange("A5:K5").values = [["기간", "계정코드", "계정명", "전표일자", "결의서번호", "결의서명", "순액", "1차 원인분류", "붙임 확인", "검토메모/붙임경로", "분석 포인트"]];
 header(detail.getRange("A5:K5"));
-detail.getRange("B6").formulas = [["=LET(t,VSTACK(HSTACK('전기원장'!$A$5:$A$1004,'전기원장'!$B$5:$B$1004,'전기원장'!$C$5:$C$1004,'전기원장'!$D$5:$D$1004,'전기원장'!$E$5:$E$1004,'전기원장'!$H$5:$H$1004,'전기원장'!$I$5:$I$1004,'전기원장'!$J$5:$J$1004,'전기원장'!$K$5:$K$1004),HSTACK('당기원장'!$A$5:$A$1004,'당기원장'!$B$5:$B$1004,'당기원장'!$C$5:$C$1004,'당기원장'!$D$5:$D$1004,'당기원장'!$E$5:$E$1004,'당기원장'!$H$5:$H$1004,'당기원장'!$I$5:$I$1004,'당기원장'!$J$5:$J$1004,'당기원장'!$K$5:$K$1004)),FILTER(t,(CHOOSECOLS(t,1)<>\"\")*ISNUMBER(XMATCH(CHOOSECOLS(t,1),FILTER('계정비교'!$A$5:$A$204,'계정비교'!$H$5:$H$204=\"원인분석 대상\"))),\"대상 없음\"))"]];
-detail.getRange("A6").formulas = [["=IF(B6=\"\",\"\",IF(COUNTIFS('전기원장'!$A$5:$A$1004,B6,'전기원장'!$D$5:$D$1004,E6)>0,\"전기\",\"당기\"))"]];
-detail.getRange("A6:A2005").fillDown();
+const detailSourceColumns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+for (let i = 0; i < detailSourceColumns.length; i++) {
+  const outputColumn = String.fromCharCode(65 + i);
+  const sourceColumn = detailSourceColumns[i];
+  detail.getRange(`${outputColumn}6`).formulas = [[`=IFERROR(INDEX('계산도우미'!$${sourceColumn}$5:$${sourceColumn}$2004,MATCH(ROWS($A$6:A6),'계산도우미'!$L$5:$L$2004,0)),"")`]];
+  detail.getRange(`${outputColumn}6:${outputColumn}505`).fillDown();
+}
 detail.getRange("K6").formulas = [["=IF(B6=\"\",\"\",IF(I6=\"확인 필요\",\"붙임 문서 확인 후 거래 성격·기간·상대방·일회성 여부 확인\",\"결의서명과 전기 대비 발생 건수·단가·시점 차이 검토\"))"]];
-detail.getRange("K6:K2005").fillDown();
-detail.getRange("D6:D2005").format.numberFormat = "yyyy-mm-dd";
-detail.getRange("G6:G2005").format.numberFormat = moneyFmt;
-detail.getRange("I6:I2005").conditionalFormats.add("containsText", { text: "확인 필요", format: { fill: red, font: { bold: true, color: "#9C0006" } } });
+detail.getRange("K6:K505").fillDown();
+detail.getRange("D6:D505").format.numberFormat = "yyyy-mm-dd";
+detail.getRange("G6:G505").format.numberFormat = moneyFmt;
+detail.getRange("I6:I505").conditionalFormats.add("containsText", { text: "확인 필요", format: { fill: red, font: { bold: true, color: "#9C0006" } } });
 detail.freezePanes.freezeRows(5);
 detail.getRange("A:A").format.columnWidth = 9;
 detail.getRange("B:B").format.columnWidth = 13;
@@ -257,7 +303,7 @@ checks.getRange("A7:D13").values = [
 header(checks.getRange("A7:D7"));
 checks.getRange("C8").formulas = [["=COUNTIF('전기원장'!$A$5:$A$1004,\"<>\")"]];
 checks.getRange("C9").formulas = [["=COUNTIF('당기원장'!$A$5:$A$1004,\"<>\")"]];
-checks.getRange("C10").formulas = [["=COUNTIF('계정비교'!$H$5:$H$204,\"원인분석 대상\")"]];
+checks.getRange("C10").formulas = [["=COUNTIF('계정비교'!$H$5:$H$1004,\"원인분석 대상\")"]];
 checks.getRange("C11").formulas = [["=COUNTIF('전기원장'!$J$5:$J$1004,\"확인 필요\")+COUNTIF('당기원장'!$J$5:$J$1004,\"확인 필요\")"]];
 checks.getRange("C12").formulas = [["=COUNTIFS('전기원장'!$B$5:$B$1004,\"<>\",'전기원장'!$A$5:$A$1004,\"\")+COUNTIFS('당기원장'!$B$5:$B$1004,\"<>\",'당기원장'!$A$5:$A$1004,\"\")"]];
 checks.getRange("C13").formulas = [["=COUNTIFS('전기원장'!$A$5:$A$1004,\"<>\",'전기원장'!$B$5:$B$1004,\"\")+COUNTIFS('당기원장'!$A$5:$A$1004,\"<>\",'당기원장'!$B$5:$B$1004,\"\")"]];
@@ -285,6 +331,7 @@ for (const [sheetName, range, file] of [
   ["기준설정", "A1:F20", "preview_settings.png"],
   ["전기원장", "A1:K12", "preview_prior.png"],
   ["당기원장", "A1:K12", "preview_current.png"],
+  ["계산도우미", "A1:L16", "preview_helper.png"],
   ["계정비교", "A1:K14", "preview_compare.png"],
   ["세부원인분석", "A1:K18", "preview_detail.png"],
   ["점검", "A1:F14", "preview_checks.png"],
