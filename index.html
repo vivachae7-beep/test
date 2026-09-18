@@ -12,7 +12,7 @@
       <div class="brand"><div class="brand-mark">₩</div><div><strong>Closing Agent</strong><span>선급금 결산검토</span></div></div>
       <nav>
         <a class="active" href="#dashboard"><span>▦</span> 검토 대시보드</a>
-        <a href="#upload"><span>↑</span> 자료 업로드</a>
+        <a href="#standards" onclick="openStandards();return false;"><span>◈</span> 결산 전 기준변경</a>
         <a href="#review"><span>✓</span> AI 검토 결과</a>
         <a href="#asset"><span>⌁</span> 담당자 피드백 루프</a>
         <a href="#journal"><span>▤</span> 조정전표 생성</a>
@@ -20,7 +20,14 @@
       <div class="sidebar-note"><span class="pulse"></span><div><b>AI 검토 준비됨</b><small>원장을 업로드하면 시작합니다</small></div></div>
     </aside>
     <main class="main">
-      <header class="topbar"><div><span class="eyebrow">YEAR-END CLOSING / 2025</span><h1>선급금 결산검토</h1></div><div class="top-actions"><button class="ghost">도움말</button><div class="avatar">비</div></div></header>
+      <header class="topbar"><div><span class="eyebrow">YEAR-END CLOSING / 2026</span><h1>결산 Review Agent</h1></div><div class="top-actions"><button class="ghost">도움말</button><div class="avatar">비</div></div></header>
+      <section id="standardsPanel" class="standards-panel">
+        <div class="section-head standards-title"><div><span class="eyebrow">PRE-CLOSING STANDARD CHECK</span><h2>결산 전 기준변경 점검</h2><p>2026년 결산에 적용되는 변경사항과 2027년 이후 시행 예정사항을 확인합니다.</p></div><button class="secondary" onclick="closeStandards()">← 검토 대시보드</button></div>
+        <div class="standards-toolbar"><label>결산연도<select id="standardsYear"><option selected>2026</option><option>2027</option></select></label><label>적용기준<select><option>공기업·준정부기관 회계기준</option><option>K-IFRS</option></select></label><button class="primary small" onclick="filterStandards()">변경사항 조회</button></div>
+        <div class="review-stats standards-stats"><div><span class="stat-label">당기 시행</span><strong id="stdEffective">3</strong><small>2026.01.01 기준</small></div><div class="stat-asset"><span class="stat-label">향후 시행</span><strong id="stdFuture">1</strong><small>2027년 이후</small></div><div class="stat-cost"><span class="stat-label">적용 확인 필요</span><strong id="stdNeed">4</strong><small>담당자 검토</small></div></div>
+        <div class="table-card standards-card"><div class="table-head"><div><span class="eyebrow">CHANGE SUMMARY</span><h4>주요 기준변경 요약</h4></div><span class="reply-hint">상세 내용은 공식 원문 링크에서 확인</span></div><div class="table-wrap"><table><thead><tr><th>구분</th><th>기준서·주제</th><th>변경 핵심</th><th>공표일</th><th>시행일</th><th>상태</th><th>출처</th></tr></thead><tbody id="standardsBody"></tbody></table></div></div>
+        <div class="source-note">※ 적용 여부는 기관의 적용 회계기준과 내부 회계정책 확인 후 확정합니다. 이 화면은 기준변경 후보를 정리하는 보조 화면입니다.</div>
+      </section>
       <section id="dashboard" class="content">
         <div class="hero"><div><span class="kicker">AI WORKFLOW</span><h2>원장에서 전표까지,<br><em>검토 과정을 한 곳에서</em></h2><p>선급금 계정원장을 업로드하면 매핑표와 비교하여 비용·자산 후보를 분류하고, 확인 이력까지 관리합니다.</p><button class="primary" onclick="document.getElementById('ledgerInput').click()">원장 업로드 시작 <span>→</span></button></div><div class="hero-graphic"><div class="orbit o1"></div><div class="orbit o2"></div><div class="orb">AI<br><small>REVIEW</small></div><div class="float-card fc1">✓ 매핑표 비교</div><div class="float-card fc2">⌁ 자산 확인</div></div></div>
         <div class="section-head"><div><span class="eyebrow">PROCESS OVERVIEW</span><h3>검토 진행 단계</h3></div><span class="status-chip">● 새 검토 시작 전</span></div>
