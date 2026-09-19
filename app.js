@@ -37,6 +37,7 @@ function renderResults(rows,fileName){
   document.getElementById('countCost').textContent=counts.cost;
   document.getElementById('countAsset').textContent=counts.asset;
   document.getElementById('countHold').textContent=counts.confusion;
+  document.getElementById('countExclude').textContent=counts.exclude;
   document.getElementById('reviewSummary').textContent=`${fileName} · ${results.length}건을 매핑표와 비교했습니다. 아래 결과는 사용자 확인 전 AI 제안입니다.`;
   const body=document.getElementById('reviewBody');
   body.innerHTML=results.length?results.slice(0,100).map(({row,result})=>{const no=pick(row,['결의번호','rsolNo','전표번호'])||'-';const vendor=pick(row,['거래처명','거래처'])||'-';const amount=money(pick(row,['금액','차변금액','대변금액']));const budget=pick(row,['비목명','비목'])||'-';const detail=pick(row,['세부항목명','세부항목','세부내역'])||'-';const cls=result.type==='cost'?'cost':result.type==='asset'?'asset':result.type==='exclude'?'hold':'confusion';return `<tr><td>${esc(no)}</td><td>${esc(vendor)}</td><td>₩${amount.toLocaleString('ko-KR')}</td><td>${esc(budget)} / ${esc(detail)}</td><td><span class="badge ${cls}">${esc(result.label)}</span></td><td>${esc(result.reason)}</td></tr>`}).join(''):'<tr><td colspan="6" class="empty-row">읽을 수 있는 데이터 행이 없습니다.</td></tr>';
