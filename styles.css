@@ -79,3 +79,12 @@ body{background:var(--cream);color:var(--ink)}
 .hero-copy{align-self:center;justify-content:center;padding:20px 26px}.hero-copy p{max-width:270px;margin:12px 0 0}
 @media(max-width:850px){.hero-graphic{min-height:330px!important}.arc-workflow-svg{width:100%}.hero-copy{padding:4px 10px 22px}.hero-copy p{max-width:none}}
 @media(max-width:620px){.hero-graphic{min-height:285px!important}.svg-node text{font-size:13px}.svg-core .core-arc{font-size:24px}.svg-core .core-ko{font-size:13px}.svg-core .core-review{font-size:10px}}
+
+/* Agent motion layer */
+.flow-particles circle{fill:#f04279;filter:drop-shadow(0 0 5px #f04279);opacity:.9}
+.svg-core circle{animation:corePulse 3.8s ease-in-out infinite}
+.svg-orbit.orbit-a{animation:orbitBreath 6s ease-in-out infinite}
+.svg-orbit.orbit-b{animation:orbitBreath 7s ease-in-out -2s infinite}
+@keyframes corePulse{0%,100%{stroke-width:4;filter:drop-shadow(0 0 0 #f0427900)}50%{stroke-width:7;filter:drop-shadow(0 0 9px #f0427988)}}
+@keyframes orbitBreath{0%,100%{opacity:.5}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.flow-particles circle,.svg-core circle,.svg-orbit{animation:none!important}}
