@@ -6,18 +6,20 @@ function filterStandards(){const year=document.getElementById('standardsYear').v
 const ASSET_WORDS=['공사','건물','구축물','기계장치','장비','자산취득','시설','취득','소프트웨어','설계','토지'];
 const EXCLUDE_WORDS=['제거','정산완료','이미 대체','환원완료'];
 const JOURNAL_HEADERS=['상태','계정과목명','계정과목코드','차대구분','차변금액','대변금액','사업ID','세부내역','거래처명','actsYy','bzplCd','rsolNo','bdgtBzplCd','aplDeptCd','dtalAtclCd','actrCd','actrNm','drcrDivCd2','pendMngeDivCd','pendNo','acotClssCd','evidNo','evidMngeNo','acotTyCd','mngeAtclCd1','ramtMngeYn1','mngeAtclVal1','mngeAtclValNm1','mngeAtclCd2','ramtMngeYn2','mngeAtclVal2','mngeAtclValNm2','mngeAtclCd3','ramtMngeYn3','mngeAtclVal3','mngeAtclValNm3','imgnAccnInstCd','bankCd','imgnAccnNo','imgnAccnDlngDt','imgnAccnDlngPtm','imgnAccnDlngSrno','fincAstsNo','dlngItmnSrno','계좌번호','금융자산명'];
+const rowGroupKey=row=>{const vendor=pick(row,['거래처명','거래처','vendor']);const detail=pick(row,['결의상세','세부내역','세부항목명']);const project=pick(row,['사업ID','사업ID명','사업']);if(!vendor&&!detail&&!project)return '';return [vendor,detail,project].join('|')};
+function pairedStates(rows){const groups=new Map();rows.forEach((row,index)=>{const key=rowGroupKey(row);if(!key)return;const g=groups.get(key)||{debit:0,credit:0,indexes:[]};g.debit+=money(pick(row,['차변','차변금액']));g.credit+=money(pick(row,['대변','대변금액']));g.indexes.push(index);groups.set(key,g)});const states=new Map();for(const g of groups.values()){if(g.debit>0&&g.credit>0){const matched=Math.abs(g.debit-g.credit)<0.5;g.indexes.forEach(i=>states.set(i,matched?'exclude':'confusion'))}}return states};
 const pick=(row,names)=>{for(const n of names){if(Object.prototype.hasOwnProperty.call(row,n)&&String(row[n]).trim()!=='')return String(row[n]).trim();}const key=Object.keys(row).find(k=>names.some(n=>k.includes(n)));return key?String(row[key]??'').trim():''};
 const money=v=>{const n=Number(String(v).replace(/[^0-9.-]/g,''));return Number.isFinite(n)?n:0};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function classify(row){
+function classify(row,pairState){
   const text=Object.values(row).join(' ');
   const no=pick(row,['결의번호','결의번호명','rsolNo','전표번호']);
   const vendor=pick(row,['거래처명','거래처','vendor']);
   const amount=pick(row,['금액','차변금액','대변금액','금액(원)']);
   const budget=pick(row,['비목명','비목','budgetName']);
   const detail=pick(row,['세부항목명','세부항목','세부내역']);
-  const credit=money(pick(row,['대변','대변금액']));
-  if(credit>0) return {type:'exclude',label:'대상제외',reason:'대변 선급금 금액이 있어 선급금 잔액이 제거된 것으로 판단'};
+  if(pairState==='exclude') return {type:'exclude',label:'대상제외',reason:'거래처·결의상세 기준 차변·대변 선급금 금액이 상계되어 잔액 0'};
+  if(pairState==='confusion') return {type:'confusion',label:'분류혼선',reason:'차변·대변 선급금 행은 연결되지만 금액이 일치하지 않아 잔액 확인 필요'};
   if(EXCLUDE_WORDS.some(w=>text.includes(w))) return {type:'exclude',label:'대상제외',reason:'원장 내용상 이미 제거·정산된 항목'};
   if(ASSET_WORDS.some(w=>text.includes(w))) return {type:'asset',label:'자산',reason:'공사·자산 관련 키워드 포함'};
   const code=pick(row,['비목코드','비목ID','비목 코드','bdgtCd']);
@@ -27,7 +29,8 @@ function classify(row){
   return {type:'confusion',label:'분류혼선',reason:'비목·세부항목 매핑 또는 차변·대변 연결 근거 확인 필요'};
 }
 function renderResults(rows,fileName){
-  const results=rows.map(r=>({row:r,result:classify(r)}));
+  const pairStates=pairedStates(rows);
+  const results=rows.map((r,i)=>({row:r,result:classify(r,pairStates.get(i))}));
   latestResults=results;
   const counts={cost:0,asset:0,confusion:0,exclude:0};results.forEach(x=>counts[x.result.type]++);
   document.getElementById('countAll').textContent=results.length;
