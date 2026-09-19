@@ -36,3 +36,15 @@ body{background:var(--cream);color:var(--ink)}
 .journal-banner{background:var(--blue-soft);border-color:#cfe1f7}
 @media(max-width:850px){.upload-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.hero-graphic{min-height:270px}.hero-copy{max-width:none}.account-links{margin-left:4px}}
 @media(max-width:620px){.hero-graphic{transform:scale(.88);transform-origin:center}.float-card{font-size:10px}.fc1{left:0}.fc2{left:0}.fc3{right:0}.fc4{right:0}}
+
+/* Final layout corrections */
+.account-links a{font-size:12px!important;font-weight:600!important;color:#53647b!important;white-space:nowrap}
+.account-links a small{float:none!important;display:inline!important;margin-left:14px;font-size:10px!important;color:#8b99aa!important;font-weight:500}
+.hero-graphic{position:relative;min-height:300px;overflow:visible}
+.hero-graphic .orb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:128px;height:128px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.hero-graphic .orbit{position:absolute;left:50%;top:50%;border:1px solid #8ec2ff66;border-radius:50%;transform:translate(-50%,-50%) rotate(-18deg);pointer-events:none}
+.hero-graphic .o1{width:245px;height:150px}.hero-graphic .o2{width:175px;height:260px;transform:translate(-50%,-50%) rotate(35deg)}
+.hero-graphic .float-card{position:absolute!important;z-index:4;white-space:nowrap;padding:11px 14px;border-radius:10px}
+.hero-graphic .fc1{left:2%;top:16%}.hero-graphic .fc2{left:0;bottom:14%}.hero-graphic .fc3{right:0;top:16%}.hero-graphic .fc4{right:0;bottom:14%}
+@media(max-width:850px){.hero-graphic{min-height:285px}.hero-graphic .fc1{left:2%}.hero-graphic .fc2{left:2%}.hero-graphic .fc3{right:2%}.hero-graphic .fc4{right:2%}}
+@media(max-width:620px){.hero-graphic{min-height:300px;transform:none}.hero-graphic .float-card{font-size:10px;padding:9px 10px}.hero-graphic .fc1{left:0;top:10%}.hero-graphic .fc2{left:0;bottom:9%}.hero-graphic .fc3{right:0;top:10%}.hero-graphic .fc4{right:0;bottom:9%}.hero-graphic .orb{width:112px;height:112px}}
