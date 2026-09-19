@@ -7,6 +7,9 @@ work/
 # Excel 원장 파일은 기본적으로 제외
 *.xls
 *.xlsx
+!templates/
+!templates/*.xls
+!templates/*.xlsx
 !templates/당기_전기_계정원장_비교분석_템플릿.xlsx
 
 # 운영체제 및 편집기 파일
