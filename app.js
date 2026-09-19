@@ -20,10 +20,10 @@ function classify(row){
   if(credit>0) return {type:'exclude',label:'대상제외',reason:'대변 선급금 금액이 있어 선급금 잔액이 제거된 것으로 판단'};
   if(EXCLUDE_WORDS.some(w=>text.includes(w))) return {type:'exclude',label:'대상제외',reason:'원장 내용상 이미 제거·정산된 항목'};
   if(ASSET_WORDS.some(w=>text.includes(w))) return {type:'asset',label:'자산',reason:'공사·자산 관련 키워드 포함'};
-  const code=pick(row,['비목코드','비목 코드','bdgtCd']);
+  const code=pick(row,['비목코드','비목ID','비목 코드','bdgtCd']);
   const detailCode=pick(row,['세부항목코드','세부항목 코드','dtalAtclCd']);
   const match=(window.MAPPING_TABLE||[]).find(m=>(code&&String(m['비목코드'])===code)&&(detailCode&&String(m['세부항목'])===detailCode)) || (window.MAPPING_TABLE||[]).find(m=>String(m['비목명']).trim()===budget&&String(m['세부항목명']).trim()===detail);
-  if(match&&String(match['계정과목']).trim()) return {type:'cost',label:'비용 대체',reason:`매핑표 일치 · ${match['계정과목']} ${match['계정과목명']}`,accountCode:String(match['계정과목']).trim(),accountName:String(match['계정과목명']).trim()};
+  if(match&&String(match['계정과목']).trim()) return {type:'cost',label:'비용',reason:`매핑표 일치 · ${match['계정과목']} ${match['계정과목명']}`,accountCode:String(match['계정과목']).trim(),accountName:String(match['계정과목명']).trim()};
   return {type:'confusion',label:'분류혼선',reason:'비목·세부항목 매핑 또는 차변·대변 연결 근거 확인 필요'};
 }
 function renderResults(rows,fileName){
