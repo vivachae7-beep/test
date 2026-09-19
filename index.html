@@ -47,7 +47,7 @@
         </div>
         <div id="journalPanel" class="journal-panel">
           <div class="journal-banner"><div><span class="kicker dark-kicker">JOURNAL EXPORT</span><h3>결산조정대체전표</h3><p>최종 확인값을 기준으로 전표 초안을 생성했습니다. 다운로드 전 차변·대변을 확인하세요.</p></div><span class="status-chip ready-chip">초안 생성</span></div>
-          <div class="journal-actions"><button class="primary small" onclick="downloadJournalXlsx()">↓ Excel 다운로드</button><button class="secondary" onclick="downloadJournalMd()">↓ MD 다운로드</button><button class="secondary green" onclick="openReversal()">익년 환원전표로 이동 →</button></div>
+          <div class="journal-actions"><button class="primary small" onclick="downloadClassificationResult()">↓ 분류결과 Excel 저장</button><button class="primary small" onclick="downloadJournalXlsx()">↓ 조정전표 Excel</button><button class="secondary" onclick="downloadJournalMd()">↓ MD 다운로드</button><button class="secondary green" onclick="openReversal()">익년 환원전표로 이동 →</button></div>
           <div class="table-card"><div class="table-head"><div><span class="eyebrow">JOURNAL PREVIEW</span><h4>전표 미리보기</h4></div><span id="journalBalance" class="reply-hint"></span></div><div class="table-wrap"><table><thead><tr><th>상태</th><th>계정과목명</th><th>계정과목</th><th>차대구분</th><th>차변금액</th><th>대변금액</th><th>사업명</th><th>결의번호</th></tr></thead><tbody id="journalBody"><tr><td colspan="8" class="empty-row">최종값 저장 후 전표가 표시됩니다.</td></tr></tbody></table></div></div>
         </div>
         <div id="reversalPanel" class="reversal-panel">
