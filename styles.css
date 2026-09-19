@@ -48,3 +48,18 @@ body{background:var(--cream);color:var(--ink)}
 .hero-graphic .fc1{left:2%;top:16%}.hero-graphic .fc2{left:0;bottom:14%}.hero-graphic .fc3{right:0;top:16%}.hero-graphic .fc4{right:0;bottom:14%}
 @media(max-width:850px){.hero-graphic{min-height:285px}.hero-graphic .fc1{left:2%}.hero-graphic .fc2{left:2%}.hero-graphic .fc3{right:2%}.hero-graphic .fc4{right:2%}}
 @media(max-width:620px){.hero-graphic{min-height:300px;transform:none}.hero-graphic .float-card{font-size:10px;padding:9px 10px}.hero-graphic .fc1{left:0;top:10%}.hero-graphic .fc2{left:0;bottom:9%}.hero-graphic .fc3{right:0;top:10%}.hero-graphic .fc4{right:0;bottom:9%}.hero-graphic .orb{width:112px;height:112px}}
+
+/* Account menu hierarchy */
+.account-links a{font-size:14px!important;line-height:1.55;padding:9px 10px!important}
+.account-links a.planned{color:#8b99aa!important}
+.account-links a small{display:none!important}
+/* Circular workflow composition */
+.hero-graphic{background:transparent!important;border:0!important;box-shadow:none!important}
+.hero-graphic .orbit{border-color:#b5d8ff99!important}
+.hero-graphic .o1{width:270px;height:170px}.hero-graphic .o2{width:195px;height:285px}
+.hero-graphic .float-card{border-radius:999px;padding:12px 17px!important}
+.hero-graphic .fc1{left:50%;top:2%;transform:translateX(-50%)}
+.hero-graphic .fc2{left:1%;bottom:8%;transform:none}
+.hero-graphic .fc3{right:1%;top:50%;transform:translateY(-50%)}
+.hero-graphic .fc4{right:50%;bottom:8%;transform:translateX(50%)}
+@media(max-width:620px){.account-links a{font-size:13px!important}.hero-graphic .fc1{top:2%}.hero-graphic .fc2{left:0;bottom:7%}.hero-graphic .fc3{right:0;top:50%}.hero-graphic .fc4{right:50%;bottom:7%}}
