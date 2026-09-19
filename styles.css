@@ -63,3 +63,19 @@ body{background:var(--cream);color:var(--ink)}
 .hero-graphic .fc3{right:1%;top:50%;transform:translateY(-50%)}
 .hero-graphic .fc4{right:50%;bottom:8%;transform:translateX(50%)}
 @media(max-width:620px){.account-links a{font-size:13px!important}.hero-graphic .fc1{top:2%}.hero-graphic .fc2{left:0;bottom:7%}.hero-graphic .fc3{right:0;top:50%}.hero-graphic .fc4{right:50%;bottom:7%}}
+
+/* SVG workflow graphic: fixed geometry prevents node overlap */
+.hero-graphic{display:flex;align-items:center;justify-content:center;min-height:390px!important;overflow:hidden!important;padding:0!important}
+.arc-workflow-svg{display:block;width:100%;max-width:760px;height:auto;overflow:visible}
+.svg-orbit{fill:none;stroke:#a7d1ff99;stroke-width:1.5;stroke-dasharray:7 8}
+.svg-link{fill:none;stroke:#9bc9ffcc;stroke-width:2;stroke-linecap:round}
+.svg-node rect{fill:#fff;stroke:#cfe5ff;stroke-width:1.5;filter:url(#arcShadow)}
+.svg-node text{fill:#003d8f;font-family:Manrope,'Noto Sans KR',sans-serif;font-size:15px;font-weight:700;text-anchor:middle}
+.svg-core circle{fill:#fff;stroke:#f04279;stroke-width:4}
+.svg-core text{text-anchor:middle;font-family:Manrope,'Noto Sans KR',sans-serif}
+.svg-core .core-arc{fill:#0057bf;font-size:27px;font-weight:800;letter-spacing:1px}
+.svg-core .core-ko{fill:#f04279;font-size:14px;font-weight:700}
+.svg-core .core-review{fill:#6e86a3;font-size:11px;font-weight:700;letter-spacing:2px}
+.hero-copy{align-self:center;justify-content:center;padding:20px 26px}.hero-copy p{max-width:270px;margin:12px 0 0}
+@media(max-width:850px){.hero-graphic{min-height:330px!important}.arc-workflow-svg{width:100%}.hero-copy{padding:4px 10px 22px}.hero-copy p{max-width:none}}
+@media(max-width:620px){.hero-graphic{min-height:285px!important}.svg-node text{font-size:13px}.svg-core .core-arc{font-size:24px}.svg-core .core-ko{font-size:13px}.svg-core .core-review{font-size:10px}}
