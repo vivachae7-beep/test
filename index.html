@@ -14,13 +14,7 @@
         <a class="active" href="#dashboard"><span>▦</span> 대시보드</a>
         <a href="#standards" onclick="openStandards();return false;"><span>◈</span> 회계기준</a>
         <a href="#upload" onclick="goDashboardSection('upload');return false;"><span>✓</span> 계정별 검토</a>
-        <div class="account-links">
-          <a href="#upload" onclick="goDashboardSection('upload');return false;"><span>·</span> 선급금</a>
-          <a class="planned" href="#"><span>·</span> 리스</a>
-          <a class="planned" href="#"><span>·</span> 퇴직급여</a>
-          <a class="planned" href="#"><span>·</span> 충당부채</a>
-          <a class="planned" href="#"><span>·</span> 유·무형자산</a>
-        </div>
+        <div class="account-links"><a href="#upload" onclick="goDashboardSection('upload');return false;"><span>·</span> 선급금</a><a class="planned" href="#"><span>·</span> 리스</a><a class="planned" href="#"><span>·</span> 퇴직급여</a><a class="planned" href="#"><span>·</span> 충당부채</a><a class="planned" href="#"><span>·</span> 유·무형자산</a><a class="ai-deep-link" href="#ai-deep" onclick="openAiDeepAnalysis();return false;"><span>✦</span> AI 심층분석</a></div>
       </nav>
       <div class="sidebar-note"><span class="pulse"></span><div><b>AI 검토 준비됨</b><small>원장을 업로드하면 시작합니다</small></div></div>
     </aside>
@@ -34,6 +28,7 @@
         <div class="table-card standards-card"><div class="table-head"><div><span class="eyebrow">CHANGE SUMMARY</span><h4>주요 기준변경 요약</h4></div><span class="reply-hint">상세 내용은 공식 원문 링크에서 확인</span></div><div class="table-wrap"><table><thead><tr><th>구분</th><th>기준서·주제</th><th>변경 핵심</th><th>공표일</th><th>시행일</th><th>상태</th><th>출처</th></tr></thead><tbody id="standardsBody"></tbody></table></div></div>
         <div id="sourceStatus" class="source-note">※ 적용 여부는 기관의 적용 회계기준과 내부 회계정책 확인 후 확정합니다. 이 화면은 기준변경 후보를 정리하는 보조 화면입니다.</div>
       </section>
+      <section id="aiDeepPanel" class="ai-deep-panel"><div class="section-head ai-deep-title"><div><span class="eyebrow">AI DEEP ANALYSIS</span><h2>AI 심층분석</h2><p>계정별 검토나 회계기준 검토에서 추가 판단이 필요한 사안을 입력하면 관련 근거를 바탕으로 AI 검토의견을 제시합니다.</p></div><button class="secondary" onclick="closeAiDeepAnalysis()">← 대시보드</button></div><div class="ai-deep-card"><div class="ai-deep-form"><label>분석 영역<select id="aiDeepDomain"><option value="accounting-standard">회계기준</option><option value="prepaid">선급금</option><option value="lease">리스</option><option value="retirement-benefit">퇴직급여</option><option value="provision">충당부채</option><option value="other">기타</option></select></label><label>분석 대상<input id="aiDeepTarget" type="text" placeholder="예: K-IFRS 제1118호, 결의번호 DEMO-001, 특정 계약"></label><label class="ai-deep-wide">검토할 사안·질문<textarea id="aiDeepQuestion" rows="4" placeholder="무엇을 판단하거나 확인하고 싶은지 입력하세요."></textarea></label><label class="ai-deep-wide">관련 정보·근거<textarea id="aiDeepEvidence" rows="5" placeholder="원장 내용, 처리지침, 매핑 결과, 계약조건 등 관련 정보를 입력하세요."></textarea></label><label>OpenAI API Key<input id="aiDeepApiKey" type="password" autocomplete="off" placeholder="분석 시 직접 입력"></label><button class="primary" type="button" onclick="runAiDeepAnalysis()">AI 심층분석 요청</button></div><div id="aiDeepStatus" class="ai-review-status">API Key는 저장하지 않으며, 분석 요청 시에만 사용합니다.</div><div id="aiDeepResult" class="ai-review-result" hidden></div></div></section>
       <section id="dashboard" class="content dashboard-page">
         <div class="section-head process-head"><div><span class="eyebrow">PROCESS OVERVIEW</span><h3>검토 진행 단계</h3></div><span class="status-chip">● 새 검토 시작 전</span></div>
         <div class="steps"><div class="step current"><div class="step-no">01</div><div><b>자료 업로드</b><small>계정원장과 기준자료</small></div></div><div class="connector"></div><div class="step"><div class="step-no">02</div><div><b>AI 분류·검토</b><small>거래별 검토 제안</small></div></div><div class="connector"></div><div class="step"><div class="step-no">03</div><div><b>담당자 검토·피드백</b><small>검토결과를 AI에 전달</small></div></div><div class="connector"></div><div class="step"><div class="step-no">04</div><div><b>최종 확정·전표 생성</b><small>MD · Excel 다운로드</small></div></div></div>
