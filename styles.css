@@ -108,3 +108,11 @@ body{background:var(--cream);color:var(--ink)}
 .standards-card table{font-size:12px!important}
 .standards-card th{font-size:12px!important}
 .source-note{font-size:12px!important;line-height:1.7!important}
+
+/* Standards panel unified type scale */
+.standards-panel{font-size:14px!important}
+.standards-panel p,.standards-panel label,.standards-panel small,.standards-panel .reply-hint,.standards-panel .source-note{font-size:13px!important;line-height:1.7!important}
+.standards-panel select,.standards-panel button{font-size:13px!important}
+.standards-panel th,.standards-panel td{font-size:13px!important;line-height:1.6!important}
+.standards-panel .stat-label{font-size:14px!important}
+.standards-panel .standards-stats small{font-size:12px!important}
