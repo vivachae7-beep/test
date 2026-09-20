@@ -130,3 +130,7 @@ body{background:var(--cream);color:var(--ink)}
 .asset-table-card td{font-size:14px!important;padding:15px 18px!important;line-height:1.45!important}
 .asset-table-card select,.asset-table-card .reply-input{font-size:13px!important;padding:9px 10px!important;min-height:38px!important}
 @media(max-width:620px){.mail-preview{padding:18px 19px!important}.mail-preview pre{font-size:13px!important;line-height:1.85!important}.asset-table-card .table-head{padding:18px 16px!important}.asset-table-card .table-head h4{font-size:17px!important}.asset-table-card table{font-size:13px!important}.asset-table-card th,.asset-table-card td{padding:12px 10px!important}.asset-table-card td{font-size:13px!important}}
+
+/* 금액 표시: 원화 기호 없이 우측 정렬 */
+.num{text-align:right!important;font-variant-numeric:tabular-nums;white-space:nowrap}
+.review-panel table th:nth-child(3),.asset-table-card table th:nth-child(3),.journal-panel table th:nth-child(5),.journal-panel table th:nth-child(6),.reversal-panel table th:nth-child(5),.reversal-panel table th:nth-child(6){text-align:right!important}
