@@ -60,7 +60,17 @@ function resetReview(){document.getElementById('ledgerInput').value='';document.
 function openAssetCenter(){pushStage('asset');const rows=latestResults.filter(x=>x.result.type==='asset');const body=document.getElementById('assetBody');body.innerHTML=rows.length?rows.map(({row,result},i)=>{const no=pick(row,['결의번호','rsolNo','전표번호'])||'-';const vendor=pick(row,['거래처명','거래처'])||'-';const amount=originalAmount(row);return `<tr><td>${esc(no)}</td><td>${esc(vendor)}</td><td>₩${amount.toLocaleString('ko-KR')}</td><td><span class="badge asset">${esc(result.label)}</span></td><td><select data-row="${i}" onchange="setReply(${i},this.value)"><option value="">선택</option><option value="자산등재">자산등재</option><option value="비용처리">비용처리</option></select></td></tr>`}).join(''):'<tr><td colspan="5" class="empty-row">자산으로 분류된 검토 대상이 없습니다.</td></tr>';document.getElementById('assetCenter').classList.add('visible');document.getElementById('assetCenter').scrollIntoView({behavior:'smooth',block:'start'})}
 function assetRows(){return latestResults.filter(x=>x.result.type==='asset')}
 function setReply(i,value){const rows=assetRows();if(rows[i])rows[i].final=value}
-function mailText(){const rows=assetRows();return `자산담당자님께!\n\n선급금 계정과목 검토 중 용역완료 후 자산등재 가능성이 있는 목록 및 관련문서를 붙임으로 송부드립니다.\n자산등재여부 검토결과를 1월5일까지 회신하여 주시기 바랍니다.\n\n검토 대상: ${rows.length}건\n\n감사합니다.`}
+function mailText(){const rows=assetRows();return `자산담당자님께
+
+안녕하세요.
+
+선급금 계정과목 검토 중 용역완료 후 자산등재 가능성이 있는 목록 및 관련문서를 붙임으로 송부드립니다.
+
+결의번호를 통해 관련 문서를 검토하신 후 자산등재 여부를 회신하여 주시기 바랍니다.
+
+검토 대상: ${rows.length}건
+
+감사합니다.`}
 async function copyMailDraft(){const text=mailText();try{await navigator.clipboard.writeText(text);document.getElementById('copyStatus').textContent='메일 초안을 클립보드에 복사했습니다.'}catch{document.getElementById('copyStatus').textContent='복사할 수 없습니다. 화면의 초안을 직접 복사해 주세요.'}}
 function downloadAssetList(){const rows=assetRows();const headerSet=new Set();rows.forEach(({row})=>Object.keys(row).forEach(k=>headerSet.add(k)));const originalHeaders=[...headerSet];const headers=[...originalHeaders,'AI제안'];const data=rows.map(({row,result})=>{const out={};originalHeaders.forEach(h=>out[h]=row[h]??'');out['AI제안']=result.label;return out});const ws=XLSX.utils.json_to_sheet(data,{header:headers});ws['!autofilter']={ref:ws['!ref']};ws['!freeze']={xSplit:0,ySplit:1};ws['!cols']=headers.map(h=>({wch:Math.max(12,Math.min(28,String(h).length+4))}));applyAmountFormat(ws);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'자산등재여부 검토목록');XLSX.writeFile(wb,'자산등재여부_검토목록.xlsx')}
 function saveFinal(){const missing=assetRows().filter(x=>!x.final);if(missing.length){alert(`${missing.length}건의 담당자 회신이 남아 있습니다.`);return}document.querySelector('#assetCenter .status-chip').textContent='최종값 저장 완료';buildJournal();pushStage('journal');document.getElementById('journalPanel').classList.add('visible');document.getElementById('journalPanel').scrollIntoView({behavior:'smooth',block:'start'})}
