@@ -108,6 +108,7 @@ body{background:var(--cream);color:var(--ink)}
 .standards-card table{font-size:12px!important}
 .standards-card th{font-size:12px!important}
 .source-note{font-size:12px!important;line-height:1.7!important}
+.source-warning{color:#b15d2c!important;background:#fff3e8;border:1px solid #f3c59f;border-radius:8px;padding:10px 12px}
 
 /* Standards panel unified type scale */
 .standards-panel{font-size:14px!important}
