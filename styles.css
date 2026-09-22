@@ -157,6 +157,13 @@ body{background:var(--cream);color:var(--ink)}
 .dashboard-page .flow-particles circle{r:5;filter:drop-shadow(0 0 7px #f04279) drop-shadow(0 0 9px #5feaff);opacity:1}
 .dashboard-page .svg-core circle{animation:arcCorePulse 2.2s ease-in-out infinite}
 @keyframes arcLinkFlow{to{stroke-dashoffset:-40}}
+
+/* Final readability tuning: ARC mark and process steps */
+.brand .brand-mark{letter-spacing:2px}
+.topbar-mark{letter-spacing:1px!important}
+.dashboard-page .steps .step b{font-size:16px}
+.dashboard-page .steps .step small{font-size:11px}
+@media(max-width:620px){.dashboard-page .steps .step b{font-size:13px}.dashboard-page .steps .step small{font-size:9px}}
 @keyframes arcOrbitFlow{to{stroke-dashoffset:-120}}
 @keyframes arcCorePulse{0%,100%{stroke-width:4;filter:drop-shadow(0 0 8px #8cf0ff)}50%{stroke-width:7;filter:drop-shadow(0 0 20px #8cf0ff)}}
 @media(prefers-reduced-motion:reduce){.dashboard-page .svg-link,.dashboard-page .svg-orbit,.dashboard-page .svg-core circle{animation:none!important}}
