@@ -165,6 +165,10 @@ body{background:var(--cream);color:var(--ink)}
 .dashboard-page .steps .step small{font-size:11px}
 @media(max-width:620px){.dashboard-page .steps .step b{font-size:13px}.dashboard-page .steps .step small{font-size:9px}}
 @keyframes arcOrbitFlow{to{stroke-dashoffset:-120}}
+/* Process overview: AI support spans the full workflow */
+.process-support{margin:0 0 12px;border:1px solid #9edcff;border-radius:16px;background:linear-gradient(100deg,#eaf7ff 0%,#f6fbff 58%,#fff 100%);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 8px 20px #3977b512}.process-support-agent{display:flex;align-items:center;gap:12px}.process-support-orb{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#1579e8,#0044a8);color:#fff;font-size:14px;font-weight:900;letter-spacing:1px;box-shadow:0 6px 14px #0057bf33}.process-support-agent b{display:block;color:#164785;font-size:15px}.process-support-agent small{display:block;color:#5f7896;font-size:11px;margin-top:4px}.process-support-note{padding-left:18px;border-left:1px solid #b9daf4;color:#5f7896;text-align:right;font-size:11px;line-height:1.6}.process-support-note strong{color:#0057bf;font-size:13px}.dashboard-page .steps{position:relative}
+@media(max-width:850px){.process-support{align-items:flex-start}.process-support-note{display:none}}
+@media(max-width:620px){.process-support{padding:13px 14px}.process-support-agent b{font-size:13px}.process-support-agent small{font-size:10px;line-height:1.45}.process-support-orb{width:38px;height:38px;font-size:12px}.dashboard-page .steps{overflow-x:auto}}
 @keyframes arcCorePulse{0%,100%{stroke-width:4;filter:drop-shadow(0 0 8px #8cf0ff)}50%{stroke-width:7;filter:drop-shadow(0 0 20px #8cf0ff)}}
 @media(prefers-reduced-motion:reduce){.dashboard-page .svg-link,.dashboard-page .svg-orbit,.dashboard-page .svg-core circle{animation:none!important}}
 
