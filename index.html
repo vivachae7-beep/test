@@ -11,7 +11,7 @@
     <aside class="sidebar">
       <div class="brand"><div class="brand-mark">ARC</div><div><strong>ARC</strong><span class="brand-ko">아알크</span><span>Accounting Review &amp; Coordination</span></div></div>
       <nav>
-        <a class="active" href="#dashboard"><span>▦</span> 대시보드</a>
+        <a class="active" href="#dashboard" onclick="openDashboardHome();return false;"><span>▦</span> 대시보드</a>
         <a href="#standards" onclick="openStandards();return false;"><span>◈</span> 회계기준</a>
         <a href="#upload" onclick="goDashboardSection('upload');return false;"><span>✓</span> 계정별 검토</a>
         <div class="account-links"><a href="#upload" onclick="selectAccount('선급금');return false;"><span>·</span> 선급금</a><a class="planned" href="#upload" onclick="selectAccount('리스');return false;"><span>·</span> 리스</a><a class="planned" href="#upload" onclick="selectAccount('퇴직급여');return false;"><span>·</span> 퇴직급여</a><a class="planned" href="#upload" onclick="selectAccount('충당부채');return false;"><span>·</span> 충당부채</a><a class="planned" href="#upload" onclick="selectAccount('유·무형자산');return false;"><span>·</span> 유·무형자산</a><a class="ai-deep-link" href="#ai-deep" onclick="openAiDeepAnalysis();return false;"><span>✦</span> AI 심층분석</a></div>
